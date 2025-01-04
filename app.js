@@ -1,8 +1,8 @@
 const express = require('express');
 const passport = require('./controllers/userController');  
 const session = require('express-session');
-const userRoutes = require('./routes/users');
-const productRoutes = require('./routes/products'); 
+const userRoutes = require('./routes/users');  
+const productRoutes = require('./routes/products');  
 const app = express();
 const PORT = 3000;
 const db = require('./db/db');
@@ -10,29 +10,29 @@ const db = require('./db/db');
 // Middleware to parse JSON
 app.use(express.json());
 
-// Initialize session
+// Initialize session for maintaining user sessions
 app.use(session({
   secret: 'your_secret_key', // Replace with a real secret key
   resave: false,
   saveUninitialized: false,
 }));
 
-// Initialize passport
+// Initialize Passport for handling user authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Define a root route
+// Root route
 app.get('/', (req, res) => {
   res.send('Welcome to the homepage!');
 });
 
-// User routes
-app.use('/api/users', userRoutes);
+// User-related routes
+app.use('/api/users', userRoutes);  // Mount user routes here
 
-// Product routes
-app.use('/api/products', productRoutes); 
+// Product-related routes
+app.use('/api/products', productRoutes);  // Mount product routes here
 
-// Test database connection
+// Database connection test
 db.pool.connect()
   .then(() => {
     console.log('Connected to the PostgreSQL database');
@@ -41,11 +41,11 @@ db.pool.connect()
     console.error('Error connecting to the PostgreSQL database:', err);
   });
 
-  // Login Route (POST /login)
+// Login Route (for handling user login)
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/dashboard', // Redirect to dashboard after successful login
-  failureRedirect: '/login', // Redirect to login page if authentication fails
-  failureFlash: true, // Flash error message if authentication fails
+  successRedirect: '/dashboard', // Redirect to dashboard on successful login
+  failureRedirect: '/login', // Redirect back to login page on failure
+  failureFlash: true,  // Show flash message if login fails
 }));
 
 // Start the server
