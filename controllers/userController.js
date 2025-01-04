@@ -69,4 +69,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-module.exports = { registerUser };
+module.exports = { registerUser, passport};
