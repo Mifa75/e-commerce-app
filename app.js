@@ -2,7 +2,8 @@ const express = require('express');
 const passport = require('./controllers/userController');  
 const session = require('express-session');
 const userRoutes = require('./routes/users');  
-const productRoutes = require('./routes/products');  
+const productRoutes = require('./routes/products'); 
+const cartRoutes = require('./routes/cart'); 
 const app = express();
 const PORT = 3000;
 const db = require('./db/db');
@@ -31,6 +32,9 @@ app.use('/api/users', userRoutes);  // Mount user routes here
 
 // Product-related routes
 app.use('/api/products', productRoutes);  // Mount product routes here
+
+// Cart routes
+app.use('/api/cart', cartRoutes);
 
 // Database connection test
 db.pool.connect()
