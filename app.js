@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productToutes'); 
 const cartRoutes = require('./routes/cartRoutes'); 
 const checkoutRoutes = require('./routes/checkoutRoutes');
+const orderRoutes = require('./routes/orders');
 const app = express();
 const PORT = 3000;
 const db = require('./db/db');
@@ -39,6 +40,9 @@ app.use('/api/cart', cartRoutes);
 
 // Checkout routes
 app.use('/api/checkout', checkoutRoutes);
+
+// Order routes
+app.use('/api/orders', orderRoutes);
 
 // Database connection test
 db.pool.connect()
