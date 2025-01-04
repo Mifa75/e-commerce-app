@@ -6,6 +6,8 @@ const productRoutes = require('./routes/productToutes');
 const cartRoutes = require('./routes/cartRoutes'); 
 const checkoutRoutes = require('./routes/checkoutRoutes');
 const orderRoutes = require('./routes/orders');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swaggerConfig');
 const app = express();
 const PORT = 3000;
 const db = require('./db/db');
@@ -28,6 +30,9 @@ app.use(passport.session());
 app.get('/', (req, res) => {
   res.send('Welcome to the homepage!');
 });
+
+// Swagger UI route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
 
 // User-related routes
 app.use('/api/users', userRoutes);  // Mount user routes here
