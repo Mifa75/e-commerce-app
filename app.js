@@ -24,6 +24,13 @@ db.pool.connect()
     console.error('Error connecting to the PostgreSQL database:', err);
   });
 
+  // Login Route (POST /login)
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/dashboard', // Redirect to dashboard after successful login
+  failureRedirect: '/login', // Redirect to login page if authentication fails
+  failureFlash: true, // Flash error message if authentication fails
+}));
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

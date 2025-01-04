@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 const registerUser = async (req, res) => {
   try {
@@ -30,5 +32,41 @@ const registerUser = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Configure Passport for Local Authentication
+passport.use(new LocalStrategy(
+  async (username, password, done) => {
+    try {
+      // Find user in the database
+      const user = await userModel.findUserByUsername(username);
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
+      // Verify password
+      const isValidPassword = userModel.verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }
+));
+
+// Serialize user to store in session
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// Deserialize user from session
+passport.deserializeUser(async (id, done) => {
+  try {
+    const result = await db.pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    done(null, result.rows[0]);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 module.exports = { registerUser };
