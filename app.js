@@ -2,6 +2,7 @@ const express = require('express');
 const userRoutes = require('./routes/users');
 const app = express();
 const PORT = 3000;
+const db = require('./db/db');
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -13,6 +14,15 @@ app.get('/', (req, res) => {
 
 // User routes
 app.use('/api/users', userRoutes);
+
+// Test database connection
+db.pool.connect()
+  .then(() => {
+    console.log('Connected to the PostgreSQL database');
+  })
+  .catch(err => {
+    console.error('Error connecting to the PostgreSQL database:', err);
+  });
 
 // Start the server
 app.listen(PORT, () => {
